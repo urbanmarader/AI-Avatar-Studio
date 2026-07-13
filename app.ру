@@ -1,1 +1,101 @@
+import tkinter as tk
+from tkinter import filedialog, messagebox
 
+from avatar.voice import AvatarVoice
+from avatar.animation import AvatarAnimation
+
+
+class AIAvatarStudio:
+
+    def __init__(self, root):
+        self.root = root
+        self.root.title("AI Avatar Studio")
+        self.root.geometry("600x450")
+
+        self.image_path = None
+
+        self.voice = AvatarVoice()
+        self.animation = AvatarAnimation()
+
+        title = tk.Label(
+            root,
+            text="AI Avatar Studio",
+            font=("Arial", 24)
+        )
+        title.pack(pady=20)
+
+
+        self.photo_button = tk.Button(
+            root,
+            text="Выбрать фото аватара",
+            command=self.load_photo,
+            width=30
+        )
+        self.photo_button.pack(pady=10)
+
+
+        self.photo_label = tk.Label(
+            root,
+            text="Фото не выбрано"
+        )
+        self.photo_label.pack()
+
+
+        self.text_box = tk.Entry(
+            root,
+            width=50
+        )
+        self.text_box.pack(pady=20)
+
+        self.text_box.insert(
+            0,
+            "Введите текст"
+        )
+
+
+        self.create_button = tk.Button(
+            root,
+            text="Говорить",
+            command=self.speak,
+            width=30
+        )
+        self.create_button.pack(pady=10)
+
+
+
+    def load_photo(self):
+
+        self.image_path = filedialog.askopenfilename(
+            filetypes=[
+                ("Фото", "*.jpg *.png *.jpeg")
+            ]
+        )
+
+        if self.image_path:
+            self.photo_label.config(
+                text=self.image_path
+            )
+
+
+
+    def speak(self):
+
+        text = self.text_box.get()
+
+        if text:
+            self.voice.speak(text)
+
+            messagebox.showinfo(
+                "AI Avatar Studio",
+                "Аватар произнёс текст"
+            )
+
+
+
+if __name__ == "__main__":
+
+    window = tk.Tk()
+
+    app = AIAvatarStudio(window)
+
+    window.mainloop()
